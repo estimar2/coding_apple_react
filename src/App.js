@@ -21,12 +21,37 @@ function App() {
   };
 
   // 타이틀 변경
-  const _modifyTitle = (idx, changeTitle) => {
+  const _changeTitle = (idx, changeTitle) => {
+    // stage 변경 함수 특징
+    // -> 기존 stage == 신규 stage 의 경우 변경 안해줌
+
+    // arrsy/object 동작 원리
+    // -> 1.자바스크립트는 array/object 자료를 하나 만들면 램이라는 가상공간에 몰래 저장하고, 변수엔 그 자료가 어디있는지 가리키는 화살표만 담겨있음
+    // -> 2. 그래서 array/obejct 자료를 복사하면 data1과 data2는 똑같은 값을 공유함
+    //        ∴ data1을 변경하면 data2도 자동으로 변경됨
+    // -> 3. 그래서 같은 화살표를 가지고 있는 변수끼리는 등호로 비교해도 똑같다고 나옴
+    //        + 자세한건 javascript reference data type 이라고 검색
+
     let newList = [...listData];
+    // ... -> spred operator
+    // 1. array나 object 자료형 왼쪽에 붙일 수 있으며, 괄호를 벗겨주세요~ 의 뜻
+    // 2. array, object 자료형을 복사할 때 많이 사용
+    // 3. let data2 = [...data1]
+    //    => 독립적인 array 복사본을 생성(object 도 마찬가지)
+    //    => shallow copy, deep copy 라고 함
 
     newList[idx] = { ...newList[idx], title: changeTitle };
 
     setListData(newList);
+  };
+
+  // 글 정렬 변경
+  const _sortList = () => {
+    let sortList = [...listData].sort((a, b) => {
+      return a.title.localeCompare(b.title);
+    });
+
+    setListData(sortList);
   };
 
   return (
@@ -35,16 +60,18 @@ function App() {
         <h4>블로그임</h4>
       </div>
 
+      <button onClick={() => _changeTitle(0, "여자코트 추천")}>
+        타이틀 변경
+      </button>
+
+      <button onClick={_sortList}>글 정렬 변경</button>
+
       <div className="list">
         <h4>
           {listData[0].title}
           <span onClick={_onAdd}>👍</span> {good}
         </h4>
         <p>{listData[0].date}</p>
-
-        <button onClick={() => _modifyTitle(0, "여자코트 추천")}>
-          타이틀 변경
-        </button>
       </div>
 
       <div className="list">
