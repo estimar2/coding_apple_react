@@ -10,20 +10,24 @@ function App() {
   // 자바스크립트 destructuring 문법 : 내가 array 안에 있는 데이터들을 변수로 쉽게 저장하고 싶으면 쓰는 문법
   // + state 는 변동사항이 생기면 state쓰는 html 도 지동으로 재랜더링 해줌
   const [listData, setListData] = useState([
-    { title: "남자코트 추천", date: "2월 17일 발행" },
-    { title: "강남 우동맛집", date: "2월 17일 발행" },
-    { title: "파이썬 독학", date: "2월 17일 발행" },
+    { title: "남자코트 추천", date: "2월 17일 발행", good: 0 },
+    { title: "강남 우동맛집", date: "2월 17일 발행", good: 0 },
+    { title: "파이썬 독학", date: "2월 17일 발행", good: 0 },
   ]);
-
-  // 좋아요
-  const [good, setGood] = useState(0);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
 
   // 좋아요 클릭
-  const _onAdd = () => {
-    setGood(good + 1);
+  const _onAdd = idx => {
+    setListData(prevListData => {
+      return prevListData.map((item, index) => {
+        if (index === idx) {
+          return { ...item, good: item.good + 1 };
+        }
+        return item;
+      });
+    });
   };
 
   // 타이틀 변경
@@ -77,7 +81,7 @@ function App() {
 
       <button onClick={_sortList}>글 정렬 변경</button>
 
-      <div className="list">
+      {/* <div className="list">
         <h4>
           {listData[0].title}
           <span onClick={_onAdd}>👍</span> {good}
@@ -99,14 +103,19 @@ function App() {
           <span>👍</span> 0
         </h4>
         <p>{listData[2].date}</p>
-      </div>
+      </div> */}
 
-      {/* {listData.map(({ title, date }) => (
-        <div className="list">
-          <h4>{title}</h4>
-          <p>{date}</p>
+      {/* map
+          1. array 자료 갯수만큼 함수안의 코드 실행
+          2. 함수의 파라미터는 array 안에 있던 자료
+          3. return 뭐 적으면 array 로 담아줌 */}
+      {listData.map((data, idx) => (
+        <div className="list" key={idx}>
+          <h4 onClick={_showModal}>{data.title}</h4>
+          <p>{data.date}</p>
+          <span onClick={() => _onAdd(idx)}>👍</span> {data.good}
         </div>
-      ))} */}
+      ))}
 
       {/* 컴포넌트로 만들면 좋은경우
           1. 반복적인 html축약할때
