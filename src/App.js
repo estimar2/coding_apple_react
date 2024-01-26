@@ -15,7 +15,11 @@ function App() {
     { title: "파이썬 독학", date: "2월 17일 발행" },
   ]);
 
+  // 좋아요
   const [good, setGood] = useState(0);
+
+  // Modal
+  const [modalOpen, setModalOpen] = useState(false);
 
   // 좋아요 클릭
   const _onAdd = () => {
@@ -56,6 +60,11 @@ function App() {
     setListData(sortList);
   };
 
+  // 제목클릭 > Modal show
+  const _showModal = () => {
+    setModalOpen(!modalOpen);
+  };
+
   return (
     <div className="App">
       <div className="black-nav">
@@ -85,7 +94,7 @@ function App() {
       </div>
 
       <div className="list">
-        <h4>
+        <h4 onClick={_showModal}>
           {listData[2].title}
           <span>👍</span> 0
         </h4>
@@ -108,7 +117,13 @@ function App() {
           2. return ()안엔 html 태그들이 평행하게 여러개 들어갈 수 없음
           3. function App(){} 내부에 만들면 안됨
           4. <component></component> 또는 <component /> 로 써도 됨 */}
-      <Modal title={""} date={""} con={""} />
+
+      {modalOpen ? <Modal title={""} date={""} con={""} /> : null}
+
+      {/* 동적인 UI 만드는 Step
+          1. html, css 로 미리 디자인 완성
+          2. UI의 현재상태를 state로 저장
+          3. state에 따라 UI가 어떻게 보일지 작성 */}
     </div>
   );
 }
