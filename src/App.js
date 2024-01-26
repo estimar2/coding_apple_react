@@ -10,13 +10,14 @@ function App() {
   // 자바스크립트 destructuring 문법 : 내가 array 안에 있는 데이터들을 변수로 쉽게 저장하고 싶으면 쓰는 문법
   // + state 는 변동사항이 생기면 state쓰는 html 도 지동으로 재랜더링 해줌
   const [listData, setListData] = useState([
-    { title: "남자코트 추천", date: "2월 17일 발행", good: 0 },
-    { title: "강남 우동맛집", date: "2월 17일 발행", good: 0 },
-    { title: "파이썬 독학", date: "2월 17일 발행", good: 0 },
+    { title: "남자코트 추천", date: "2월 17일 발행", con: "게시글1", good: 0 },
+    { title: "강남 우동맛집", date: "2월 17일 발행", con: "게시글2", good: 0 },
+    { title: "파이썬 독학", date: "2월 17일 발행", con: "게시글3", good: 0 },
   ]);
 
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState([]);
 
   // 좋아요 클릭
   const _onAdd = idx => {
@@ -65,7 +66,8 @@ function App() {
   };
 
   // 제목클릭 > Modal show
-  const _showModal = () => {
+  const _showModal = data => {
+    setModalData(data);
     setModalOpen(!modalOpen);
   };
 
@@ -75,9 +77,9 @@ function App() {
         <h4>ReactBlog</h4>
       </div>
 
-      <button onClick={() => _changeTitle(0, "여자코트 추천")}>
+      {/* <button onClick={() => _changeTitle(0, "여자코트 추천")}>
         타이틀 변경
-      </button>
+      </button> */}
 
       <button onClick={_sortList}>글 정렬 변경</button>
 
@@ -111,7 +113,7 @@ function App() {
           3. return 뭐 적으면 array 로 담아줌 */}
       {listData.map((data, idx) => (
         <div className="list" key={idx}>
-          <h4 onClick={_showModal}>{data.title}</h4>
+          <h4 onClick={() => _showModal(data)}>{data.title}</h4>
           <p>{data.date}</p>
           <span onClick={() => _onAdd(idx)}>👍</span> {data.good}
         </div>
@@ -126,8 +128,12 @@ function App() {
           2. return ()안엔 html 태그들이 평행하게 여러개 들어갈 수 없음
           3. function App(){} 내부에 만들면 안됨
           4. <component></component> 또는 <component /> 로 써도 됨 */}
-
-      {modalOpen ? <Modal title={""} date={""} con={""} /> : null}
+      {/* 부모 -> 자식 stage 전송
+          1. <자식 컴포넌트 작명={state이름} />
+          2. props 파라미터 등록 후 props.작명 사용 */}
+      {modalOpen ? (
+        <Modal modalData={modalData} _changeTitle={_changeTitle} />
+      ) : null}
 
       {/* 동적인 UI 만드는 Step
           1. html, css 로 미리 디자인 완성
