@@ -2,6 +2,8 @@
 // Lint 끄는 기능
 
 import React, { useState } from "react";
+import Modal from "./Modal";
+
 import "./App.css";
 
 function App() {
@@ -57,7 +59,7 @@ function App() {
   return (
     <div className="App">
       <div className="black-nav">
-        <h4>블로그임</h4>
+        <h4>ReactBlog</h4>
       </div>
 
       <button onClick={() => _changeTitle(0, "여자코트 추천")}>
@@ -96,6 +98,17 @@ function App() {
           <p>{date}</p>
         </div>
       ))} */}
+
+      {/* 컴포넌트로 만들면 좋은경우
+          1. 반복적인 html축약할때
+          2. 큰 페이지들
+          3. 자주 변경되는 것들 */}
+      {/* 컴포넌트 만들때 주의점
+          1. 컴포넌트 작명할 땐 영어 대문자로 보통 작명함
+          2. return ()안엔 html 태그들이 평행하게 여러개 들어갈 수 없음
+          3. function App(){} 내부에 만들면 안됨
+          4. <component></component> 또는 <component /> 로 써도 됨 */}
+      <Modal title={""} date={""} con={""} />
     </div>
   );
 }
