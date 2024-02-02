@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Lint 끄는 기능
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment/moment";
 import Modal from "./Modal";
 
@@ -85,16 +85,16 @@ function App() {
       good: 0,
     };
 
-    let prevListData = listData;
+    let prevListData = [...listData];
 
-    prevListData.push(addData);
+    prevListData.unshift(addData);
 
     setListData(prevListData);
   };
 
   // 글 삭제
   const _deleteList = idx => {
-    let prevListData = listData;
+    let prevListData = [...listData];
 
     prevListData.splice(idx, 1);
 
