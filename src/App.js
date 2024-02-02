@@ -2,6 +2,7 @@
 // Lint 끄는 기능
 
 import React, { useState } from "react";
+import moment from "moment/moment";
 import Modal from "./Modal";
 
 import "./App.css";
@@ -18,6 +19,8 @@ function App() {
   // Modal
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState([]);
+
+  const [inputData, setInputData] = useState("");
 
   // 좋아요 클릭
   const _onAdd = idx => {
@@ -71,6 +74,33 @@ function App() {
     setModalOpen(!modalOpen);
   };
 
+  // 입력 값 목록에 저장
+  const _addList = () => {
+    let listIdx = listData.length + 1;
+
+    let addData = {
+      title: inputData,
+      date: `${moment().format("MM")}월 ${moment().format("DD")}일 발행`,
+      con: `게시글${listIdx}`,
+      good: 0,
+    };
+
+    let prevListData = listData;
+
+    prevListData.push(addData);
+
+    setListData(prevListData);
+  };
+
+  // 글 삭제
+  const _deleteList = idx => {
+    let prevListData = listData;
+
+    prevListData.splice(idx, 1);
+
+    setListData(prevListData);
+  };
+
   return (
     <div className="App">
       <div className="black-nav">
@@ -113,11 +143,35 @@ function App() {
           3. return 뭐 적으면 array 로 담아줌 */}
       {listData.map((data, idx) => (
         <div className="list" key={idx}>
-          <h4 onClick={() => _showModal(data)}>{data.title}</h4>
+          <h4 onClick={() => _showModal(data)}>
+            {data.title}
+            <span
+              onClick={e => {
+                {
+                  /* 이벤트 버블링 : 클릭 이벤트는 상위 html 로 퍼짐
+                            이벤트 버블링을 막고싶으면 e.stopPropagation() 을 쓰면 됨 */
+                }
+                e.stopPropagation();
+                _onAdd(idx);
+              }}
+            >
+              👍
+            </span>
+            {data.good}
+          </h4>
           <p>{data.date}</p>
-          <span onClick={() => _onAdd(idx)}>👍</span> {data.good}
+          <button onClick={() => _deleteList(idx)}>글 삭제</button>
         </div>
       ))}
+
+      <div>
+        <input
+          type="text"
+          value={inputData}
+          onChange={e => setInputData(e.target.value)}
+        />
+        <button onClick={_addList}>저장</button>
+      </div>
 
       {/* 컴포넌트로 만들면 좋은경우
           1. 반복적인 html축약할때
