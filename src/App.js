@@ -76,6 +76,10 @@ function App() {
 
   // 입력 값 목록에 저장
   const _addList = () => {
+    if (inputData === "") {
+      return alert("글 제목을 입력해주세요.");
+    }
+
     let listIdx = listData.length + 1;
 
     let addData = {
@@ -167,6 +171,7 @@ function App() {
       <div>
         <input
           type="text"
+          placeholder="글 제목 입력"
           value={inputData}
           onChange={e => setInputData(e.target.value)}
         />
