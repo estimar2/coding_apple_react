@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import styled from "styled-components";
 
 // styled-components
@@ -28,7 +28,35 @@ import styled from "styled-components";
 //   padding: 20px;
 // `;
 
+// 컴포넌트의 Lifecycle
+// 페이지에 장착되기도 하고(mount)
+// 가끔 업데이트가 되기도 하고(update)
+// 필요 없으면 제거되고(unmount)
+// >> 알고있으면 중간중간 코드실행 가능
+
 const Detail = ({ shoes }) => {
+  useEffect(() => {
+    // detail 컴포넌트가 mount, update 시 코드가 실행됨
+    console.log("hello");
+
+    // setTimeout(() => {
+    //   실행할 코드
+    // }, ms단위의 시간)
+
+    // 2초 뒤에 alert창 안보이도록
+    setTimeout(() => {
+      setShow(false);
+    }, 2000);
+
+    // useEffect쓰는 이유
+    // useEffect안에 있는 코드는 html 렌더링 후에 동작함
+
+    // useEffect안에 적는 코드들은
+    // 1. 어려운 연산
+    // 2. 서버에서 데이터 가져오는 작업
+    // 3. 타이머 장착하는거
+  });
+
   // 유저가 URL파라미터에 입력한거 가져오려면 : useParams()
   let { id } = useParams();
 
@@ -39,11 +67,17 @@ const Detail = ({ shoes }) => {
     return a.id == id;
   });
 
+  const [show, setShow] = useState(true);
+
   return (
     <>
       <Container className="container">
         {/* <Btn1 bg="blue">버튼1</Btn1>
         <Btn1 bg="orange">버튼2</Btn1> */}
+
+        <Alert show={show} variant="danger">
+          2초 이내 구매시 할인
+        </Alert>
 
         {/* <BlackBox>
           <YellowBtn>버튼</YellowBtn>
