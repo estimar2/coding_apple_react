@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
-import { Container, Nav, Navbar, Row } from "react-bootstrap";
+import { Container, Nav, Navbar, Row, Col, Button } from "react-bootstrap";
 import "./App.css";
 
 import data from "./data.js";
-import List from "./list.js";
 
-import { Detail, About, Event } from "./routes";
+import { List, Detail, About, Event } from "./routes";
 
 // /detail : 상세페이지
 // /cart : 장바구니 페이지
@@ -23,7 +22,7 @@ import { Detail, About, Event } from "./routes";
 //     알아서 필요할 때마다 폴더를 만들어서 사용하면 됨
 
 function App() {
-  const [shoes] = useState(data);
+  const [shoes, setShoes] = useState(data);
 
   // useNavigate : 페이지 이동을 도와주는 hook
   // navigate(2)과 같이 숫자를 넣으면 앞으로가기, 뒤로가기 기능개발도 가능함
@@ -55,13 +54,29 @@ function App() {
 
               <Container>
                 <Row>
+                  <Col xs={24} md={0}>
+                    <Button
+                      variant="warning"
+                      onClick={() => {
+                        let sortList = [...shoes].sort((a, b) => {
+                          return a.title.localeCompare(b.title);
+                        });
+
+                        setShoes(sortList);
+                      }}
+                    >
+                      가나다순 정렬
+                    </Button>
+                  </Col>
                   {shoes ? shoes.map(data => <List data={data} />) : null}
                 </Row>
               </Container>
             </>
           }
         />
-        <Route path="/detail" element={<Detail />} />
+
+        {/* 페이지 여러개 만들고 싶으면 : URL 파라미터 써도 됨 */}
+        <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
 
         {/* Nested Routes : route 안에 route 작성하기
         1. route 작성이 약간 간단해짐 nested routes의 element
