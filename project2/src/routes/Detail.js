@@ -18,7 +18,6 @@ const Detail = ({ shoes }) => {
       <Container className="container">
         <Row>
           <Col>
-            {console.log(returnData, ">> returnData")}
             <img src={returnData.img} width="100%" />
           </Col>
           <Col>
