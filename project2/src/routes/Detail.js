@@ -35,27 +35,47 @@ import styled from "styled-components";
 // >> 알고있으면 중간중간 코드실행 가능
 
 const Detail = ({ shoes }) => {
-  useEffect(() => {
-    // detail 컴포넌트가 mount, update 시 코드가 실행됨
-    console.log("hello");
+  useEffect(
+    () => {
+      // detail 컴포넌트가 mount, update 시 코드가 실행됨
+      console.log("hello");
 
-    // setTimeout(() => {
-    //   실행할 코드
-    // }, ms단위의 시간)
+      // setTimeout(() => {
+      //   실행할 코드
+      // }, ms단위의 시간)
 
-    // 2초 뒤에 alert창 안보이도록
-    setTimeout(() => {
-      setShow(false);
-    }, 2000);
+      // 2초 뒤에 alert창 안보이도록
+      let a = setTimeout(() => {
+        setShow(false);
+      }, 2000);
 
-    // useEffect쓰는 이유
-    // useEffect안에 있는 코드는 html 렌더링 후에 동작함
+      // useEffect쓰는 이유
+      // useEffect안에 있는 코드는 html 렌더링 후에 동작함
 
-    // useEffect안에 적는 코드들은
-    // 1. 어려운 연산
-    // 2. 서버에서 데이터 가져오는 작업
-    // 3. 타이머 장착하는거
-  });
+      // useEffect안에 적는 코드들은
+      // 1. 어려운 연산
+      // 2. 서버에서 데이터 가져오는 작업
+      // 3. 타이머 장착하는거
+
+      // clean up function : useEffect안에 return () => {}; 을 적을 경우 useEffect 동작 전에 실행되는 코드
+      // ++ mount시 실행 안됨, umount시 실행됨
+      return () => {
+        // 기존 코드 치우는거 여기에 많이 작성함
+        clearTimeout(a);
+      };
+    },
+    [
+      // useEffect 실행 조건을 넣을 수 있는 곳 state 혹은 변수를 넣어줄 수 있음
+      // 조건이 변경될 때 코드가 실행됨
+      // 컴포넌트 mount시 1회만 실행하고싶을 경우 '}, [])' 이렇게 사용
+    ],
+  );
+
+  // useEffect(() => {}) 1.재렌더링마다 코드 실행하고 싶으면
+  // useEffect(() => {}, []) 2. mount시 1회 코드 실행하고 싶으면
+  // useEffect(() => { return () => {} }) 3. unmount시 1회 코드실행하고 싶으면
+  // useEffect(() => { return () => {} }), useEffect(() => { return () => {} }, []) 4. useEffect 실행 전에 뭔가 실행하려면 언제나
+  // useEffect(() => {}, [변수명]) 5. 특정 state 변경시에만 실행하려면
 
   // 유저가 URL파라미터에 입력한거 가져오려면 : useParams()
   let { id } = useParams();
@@ -75,7 +95,7 @@ const Detail = ({ shoes }) => {
         {/* <Btn1 bg="blue">버튼1</Btn1>
         <Btn1 bg="orange">버튼2</Btn1> */}
 
-        <Alert show={show} variant="danger">
+        <Alert show={show} variant="warning">
           2초 이내 구매시 할인
         </Alert>
 
