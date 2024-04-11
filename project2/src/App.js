@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
 import { Container, Nav, Navbar, Row, Col, Button } from "react-bootstrap";
 import "./App.css";
@@ -21,12 +22,45 @@ import { List, Detail, About, Event } from "./routes";
 //     자주 쓰는 함수가 들어있는 js파일은 utils폴더에 묶고
 //     알아서 필요할 때마다 폴더를 만들어서 사용하면 됨
 
+// 서버 : 데이터를 요청하면 데이터를 보내주는 프로그램
+//        방법 : GET(데이터 가져올때)/POST(데이터를 서버로 보내고싶을때)
+//        어떤 방법 : URL 형식
+
 function App() {
   const [shoes, setShoes] = useState(data);
 
   // useNavigate : 페이지 이동을 도와주는 hook
   // navigate(2)과 같이 숫자를 넣으면 앞으로가기, 뒤로가기 기능개발도 가능함
   let navigate = useNavigate();
+
+  // 상품 더보기
+  const _getMore = async () => {
+    // ajax : 서버에 get, post 요청을 할 때 새로고침 없이 데이터를 주고받을 수 있게 도와주는 간단한 브라우저 기능
+    // ajax쓰려면 옵션 3개중 택 1
+    // 1. XMLHttpsRequest
+    // 2. fetch()
+    // 3. axios
+
+    axios
+      .get("https://codingapple1.github.io/shop/data2.json")
+      .then(res => {
+        if (res.status === 200) {
+          const resultData = res.data;
+
+          let newList = shoes;
+
+          resultData.map((list, idx) => {
+            newList.push({
+              ...list,
+              img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
+            });
+          });
+
+          setShoes(newList);
+        }
+      })
+      .catch(e => console.log(e, "> error"));
+  };
 
   return (
     <div className="App">
@@ -97,6 +131,10 @@ function App() {
         위에 만들어둔 /detail 이런게 아닌 이상한 페이지 접속시 *경로로 안내 해줌 */}
         <Route path="*" element={<div>없는 페이지당</div>} />
       </Routes>
+
+      <Button variant="warning" onClick={_getMore}>
+        상품 더보기
+      </Button>
     </div>
   );
 }
