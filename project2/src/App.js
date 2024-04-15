@@ -1,7 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
-import { Container, Nav, Navbar, Row, Col, Button } from "react-bootstrap";
+import {
+  Container,
+  Nav,
+  Navbar,
+  Row,
+  Col,
+  Button,
+  Spinner,
+} from "react-bootstrap";
 import "./App.css";
 
 import data from "./data.js";
@@ -29,33 +37,61 @@ import { List, Detail, About, Event } from "./routes";
 function App() {
   const [shoes, setShoes] = useState(data);
 
+  const [loading, setLoading] = useState(false);
+
+  const [btnCount, setBtnCount] = useState(0);
+
   // useNavigate : 페이지 이동을 도와주는 hook
   // navigate(2)과 같이 숫자를 넣으면 앞으로가기, 뒤로가기 기능개발도 가능함
   let navigate = useNavigate();
 
   // 상품 더보기
-  const _getMore = async () => {
+  const _getMore = () => {
     // ajax : 서버에 get, post 요청을 할 때 새로고침 없이 데이터를 주고받을 수 있게 도와주는 간단한 브라우저 기능
     // ajax쓰려면 옵션 3개중 택 1
     // 1. XMLHttpsRequest
     // 2. fetch()
     // 3. axios
 
+    setLoading(true);
+
+    let count = btnCount + 1;
+    setBtnCount(count);
+
+    if (count === 3) {
+      setLoading(false);
+      return alert("가져올 상품이 없습니다.");
+    }
+
     axios
       .get("https://codingapple1.github.io/shop/data2.json")
       .then(res => {
         if (res.status === 200) {
+          setLoading(false);
+
           const resultData = res.data;
 
-          let newList = shoes;
+          let newList = [...shoes];
+          // let newList = [...shoes, ...resultData.data];
 
-          resultData.map((list, idx) => {
-            newList.push({
-              ...list,
-              img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
+          if (count <= 1) {
+            resultData.map((list, idx) => {
+              newList.push({
+                ...list,
+                img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
+              });
             });
-          });
+          } else if (count === 2) {
+            resultData.map((list, idx) => {
+              newList.push({
+                ...list,
+                id: list.id + 3,
+                img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
+              });
+            });
+          }
 
+          console.log(newList, ">> newList");
           setShoes(newList);
         }
       })
@@ -102,6 +138,8 @@ function App() {
                       가나다순 정렬
                     </Button>
                   </Col>
+                </Row>
+                <Row xs={1} md={3}>
                   {shoes ? shoes.map(data => <List data={data} />) : null}
                 </Row>
               </Container>
@@ -135,6 +173,7 @@ function App() {
       <Button variant="warning" onClick={_getMore}>
         상품 더보기
       </Button>
+      {loading && <Spinner animation="border" role="status" />}
     </div>
   );
 }
