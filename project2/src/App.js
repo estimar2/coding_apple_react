@@ -64,38 +64,24 @@ function App() {
     }
 
     axios
-      .get("https://codingapple1.github.io/shop/data2.json")
+      .get(`https://codingapple1.github.io/shop/data${count + 1}.json`)
+      // 동시에 ajax 요청 여러개 하려면 : Promise.all( [axios.get('URL1'), axiox.get('URL2')]).then(() => {}).catch(() => {}) -> URL1, URL2로 get요청을 동시에 해줌
+      // fetch('URL').then(res => res.json()).then(data => {}) : fetch의 경우 JS기본문법으로도 get요청 가능, fetch로 json데이터를 가져왔을 경우 그 json을 그대로 출력해줌 따라서 array/object로 변환 과정 필요 => axios를 사용하면 따로 변환활 필요 없음
       .then(res => {
         if (res.status === 200) {
           setLoading(false);
 
           const resultData = res.data;
 
-          let newList = [...shoes];
-          // let newList = [...shoes, ...resultData.data];
+          let newList = [...shoes, ...resultData];
 
-          if (count <= 1) {
-            resultData.map((list, idx) => {
-              newList.push({
-                ...list,
-                img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
-              });
-            });
-          } else if (count === 2) {
-            resultData.map((list, idx) => {
-              newList.push({
-                ...list,
-                id: list.id + 3,
-                img: `https://codingapple1.github.io/shop/shoes${idx + 1}.jpg`,
-              });
-            });
-          }
-
-          console.log(newList, ">> newList");
           setShoes(newList);
         }
       })
-      .catch(e => console.log(e, "> error"));
+      .catch(e => {
+        console.log(e, "> error");
+        alert("목록을 불러오는데 문제가 발생하였습니다.");
+      });
   };
 
   return (
@@ -170,9 +156,12 @@ function App() {
         <Route path="*" element={<div>없는 페이지당</div>} />
       </Routes>
 
-      <Button variant="warning" onClick={_getMore}>
-        상품 더보기
-      </Button>
+      {btnCount <= 1 ? (
+        <Button variant="warning" onClick={_getMore}>
+          상품 더보기
+        </Button>
+      ) : null}
+
       {loading && <Spinner animation="border" role="status" />}
     </div>
   );
