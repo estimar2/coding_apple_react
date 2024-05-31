@@ -9,8 +9,8 @@ const Cart = () => {
   //    2. index.js파일가서 <Provider store={store}>쓰기
   // Redux store의 state꺼내쓰는법 : useSelector(() => {})
   // Redux store안에 모든걸 넣지말고, 컴포넌트간 공유가 필요없으면 그냥 useState() 쓰면됨
-  let state = useSelector(state => state.cartList);
-  console.log(state, ">> state");
+  let cartList = useSelector(state => state.cartList);
+  console.log(cartList, ">> cartList");
 
   return (
     <>
@@ -23,8 +23,8 @@ const Cart = () => {
           </tr>
         </thead>
         <tbody>
-          {state.length !== 0
-            ? state.map((data, idx) => (
+          {cartList.length !== 0
+            ? cartList.map((data, idx) => (
                 <>
                   <tr key={idx}>
                     <td>{data.id}</td>
