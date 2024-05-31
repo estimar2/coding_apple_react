@@ -14,7 +14,7 @@ import "./App.css";
 
 import data from "./data.js";
 
-import { List, Detail, About, Event } from "./routes";
+import { List, Detail, About, Event, Cart } from "./routes";
 
 export let Context1 = createContext(); // state보관함
 
@@ -96,6 +96,7 @@ function App() {
             <Link to="/detail">상세페이지</Link> */}
             <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
             <Nav.Link onClick={() => navigate("/detail")}>Detail</Nav.Link>
+
             {/* <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#detail">Cart</Nav.Link> */}
           </Nav>
@@ -153,6 +154,9 @@ function App() {
             </Context1.Provider>
           }
         />
+
+        {/* 장바구니 */}
+        <Route path="/cart" element={<Cart />} />
 
         {/* Nested Routes : route 안에 route 작성하기
         1. route 작성이 약간 간단해짐 nested routes의 element
