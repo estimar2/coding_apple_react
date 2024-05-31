@@ -128,6 +128,15 @@ function App() {
                 <Row xs={1} md={3}>
                   {shoes ? shoes.map(data => <List data={data} />) : null}
                 </Row>
+                {btnCount <= 1 ? (
+                  <Row>
+                    <Col xs={24} md={0}>
+                      <Button variant="warning" onClick={_getMore}>
+                        상품 더보기
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : null}
               </Container>
             </>
           }
@@ -155,12 +164,6 @@ function App() {
         위에 만들어둔 /detail 이런게 아닌 이상한 페이지 접속시 *경로로 안내 해줌 */}
         <Route path="*" element={<div>없는 페이지당</div>} />
       </Routes>
-
-      {btnCount <= 1 ? (
-        <Button variant="warning" onClick={_getMore}>
-          상품 더보기
-        </Button>
-      ) : null}
 
       {loading && <Spinner animation="border" role="status" />}
     </div>

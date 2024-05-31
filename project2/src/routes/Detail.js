@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Row, Col, Button, Alert } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert, Tab, Tabs } from "react-bootstrap";
+
 import styled from "styled-components";
 
 // styled-components
@@ -89,6 +90,8 @@ const Detail = ({ shoes }) => {
 
   const [show, setShow] = useState(true);
 
+  const [tabKey, setTabKey] = useState("0");
+
   return (
     <>
       <Container className="container">
@@ -113,9 +116,63 @@ const Detail = ({ shoes }) => {
             <Button variant="danger">주문하기</Button>
           </Col>
         </Row>
+
+        <Row>
+          <Col>
+            <Tabs
+              defaultActiveKey="0"
+              activeKey={tabKey}
+              onSelect={e => setTabKey(e)}
+            >
+              <Tab eventKey="0" title="버튼 0">
+                탭 0
+              </Tab>
+              <Tab eventKey="1" title="버튼 1">
+                탭 1
+              </Tab>
+              <Tab eventKey="2" title="버튼 2">
+                탭 2
+              </Tab>
+            </Tabs>
+          </Col>
+        </Row>
+
+        <TabContent tabKey={tabKey} />
       </Container>
     </>
   );
 };
+
+// react 에서 if 문사용하려면 commponent 형태로 만들어서 사용
+function TabContent({ tabKey }) {
+  if (tabKey === "0") {
+    return (
+      <Row>
+        <Col>내용0</Col>
+      </Row>
+    );
+  }
+  if (tabKey === "1") {
+    return (
+      <Row>
+        <Col>내용1</Col>
+      </Row>
+    );
+  }
+  if (tabKey === "2") {
+    return (
+      <Row>
+        <Col>내용2</Col>
+      </Row>
+    );
+  }
+
+  // if문 안쓰고 이렇게 써도 됨
+  // return [
+  //   <Row><Col>내용0</Col></Row>,
+  //   <Row><Col>내용1</Col></Row>,
+  //   <Row><Col>내용2</Col></Row>,
+  // ][tabKey];
+}
 
 export default Detail;
