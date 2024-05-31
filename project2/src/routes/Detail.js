@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Alert, Tab, Tabs } from "react-bootstrap";
+
+import { Context1 } from "./../App.js";
 
 import styled from "styled-components";
 
@@ -36,6 +38,8 @@ import styled from "styled-components";
 // >> 알고있으면 중간중간 코드실행 가능
 
 const Detail = ({ shoes }) => {
+  let a = useContext(Context1); // 보관함 해체해줌
+
   useEffect(
     () => {
       // detail 컴포넌트가 mount, update 시 코드가 실행됨
@@ -143,6 +147,19 @@ const Detail = ({ shoes }) => {
 
 // react 에서 if 문사용하려면 commponent 형태로 만들어서 사용
 function TabContent({ tabKey }) {
+  // props싫으면
+  // 1.Context API(리액트 기본문법)
+  // props전송없이 state공유가능 -> 실전에서 많이 사용하지x why? 1.성능이슈, 2.컴포넌트 재활용이 어렵다
+  //                                특징1. state변경시 쓸데없는 것까지 재렌더링
+  //                                특징2. 나중에 컴포넌트 재사용이 어려움(Context를 import 하는게 귀찮아질수있음)
+  // Context API 문법으로 prps없이 state 공유하기
+  //    1.createContext() 함수를 가져와서 context(state보관함)를 하나 만들어줌
+  //    2.만든 contexxt로 원하는 곳을 감싸고 공유를 원하는 state를 value안에 다 적어준다.
+  // Context안에 있던 state 사용하려면
+  //    1.만들어둔 Context를 import 해온다.
+  //    2.useContext()안에 넣는다.
+  // 2.Redux 등 외부라이브러리 사용
+
   const [fade, setFade] = useState("");
 
   // tabKey가 변경될때 className = 'end' 추가

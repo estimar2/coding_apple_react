@@ -1,6 +1,6 @@
-import { useState } from "react";
-import axios from "axios";
+import { createContext, useState } from "react";
 import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   Nav,
@@ -15,6 +15,8 @@ import "./App.css";
 import data from "./data.js";
 
 import { List, Detail, About, Event } from "./routes";
+
+export let Context1 = createContext(); // state보관함
 
 // /detail : 상세페이지
 // /cart : 장바구니 페이지
@@ -36,7 +38,7 @@ import { List, Detail, About, Event } from "./routes";
 
 function App() {
   const [shoes, setShoes] = useState(data);
-
+  const [prdCount, setPrdCount] = useState([10, 11, 12]);
   const [loading, setLoading] = useState(false);
 
   const [btnCount, setBtnCount] = useState(0);
@@ -143,7 +145,14 @@ function App() {
         />
 
         {/* 페이지 여러개 만들고 싶으면 : URL 파라미터 써도 됨 */}
-        <Route path="/detail/:id" element={<Detail shoes={shoes} />} />
+        <Route
+          path="/detail/:id"
+          element={
+            <Context1.Provider vlaue={{ prdCount, shoes }}>
+              <Detail shoes={shoes} />
+            </Context1.Provider>
+          }
+        />
 
         {/* Nested Routes : route 안에 route 작성하기
         1. route 작성이 약간 간단해짐 nested routes의 element
