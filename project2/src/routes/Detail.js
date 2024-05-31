@@ -39,7 +39,7 @@ const Detail = ({ shoes }) => {
   useEffect(
     () => {
       // detail 컴포넌트가 mount, update 시 코드가 실행됨
-      console.log("hello");
+      // console.log("hello");
 
       // setTimeout(() => {
       //   실행할 코드
@@ -125,19 +125,17 @@ const Detail = ({ shoes }) => {
               onSelect={e => setTabKey(e)}
             >
               <Tab eventKey="0" title="버튼 0">
-                탭 0
+                <TabContent tabKey={tabKey} />
               </Tab>
               <Tab eventKey="1" title="버튼 1">
-                탭 1
+                <TabContent tabKey={tabKey} />
               </Tab>
               <Tab eventKey="2" title="버튼 2">
-                탭 2
+                <TabContent tabKey={tabKey} />
               </Tab>
             </Tabs>
           </Col>
         </Row>
-
-        <TabContent tabKey={tabKey} />
       </Container>
     </>
   );
@@ -145,27 +143,27 @@ const Detail = ({ shoes }) => {
 
 // react 에서 if 문사용하려면 commponent 형태로 만들어서 사용
 function TabContent({ tabKey }) {
-  if (tabKey === "0") {
-    return (
-      <Row>
-        <Col>내용0</Col>
-      </Row>
-    );
-  }
-  if (tabKey === "1") {
-    return (
-      <Row>
-        <Col>내용1</Col>
-      </Row>
-    );
-  }
-  if (tabKey === "2") {
-    return (
-      <Row>
-        <Col>내용2</Col>
-      </Row>
-    );
-  }
+  const [fade, setFade] = useState("");
+
+  // tabKey가 변경될때 className = 'end' 추가
+  useEffect(() => {
+    // react v18이상의 버전
+    // automatic batching 기능 : state 변경한 함수들이 근처에 있을 경우 최종적으로 한번만 state변경해줌
+    setTimeout(() => {
+      setFade("end");
+    }, 100);
+
+    // clean up function
+    return () => {
+      setFade("");
+    };
+  }, [tabKey]);
+
+  return (
+    <Row className={`start ` + fade}>
+      <Col>내용{tabKey}</Col>
+    </Row>
+  );
 
   // if문 안쓰고 이렇게 써도 됨
   // return [
