@@ -51,11 +51,13 @@ const Detail = ({ shoes }) => {
         ? JSON.parse(localStorage.getItem("watched"))
         : [];
 
-      check.push(id);
+      check.push(returnData.id);
 
       let newCheck = [...new Set(check)];
 
       localStorage.setItem("watched", JSON.stringify(newCheck));
+
+      // Jotai, Zustand 리덕스와 비슷하고 더 쉬움
 
       // detail 컴포넌트가 mount, update 시 코드가 실행됨
       // console.log("hello");
