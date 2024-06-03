@@ -161,7 +161,7 @@ function App() {
       {/* React Query 사용하면
           - ajax 성공시/실패시 html보여주려면?
           - 몇초마다 자동으로 ajax요청?
-          - 실패시 몇초 후 재용청 시도?
+          - 실패시 몇초 후 재요청 시도?
           - prefetch ?
       이것들 쉽게 구현 가능
       but 항상 유용하지는 않음
