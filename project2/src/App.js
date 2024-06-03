@@ -96,7 +96,7 @@ function App() {
             <Link to="/detail">상세페이지</Link> */}
             <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
             <Nav.Link onClick={() => navigate("/detail")}>Detail</Nav.Link>
-
+            <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
             {/* <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#detail">Cart</Nav.Link> */}
           </Nav>

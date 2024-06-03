@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit"; // Redux개선버전
 import user from "./store/userSlice.js";
 
 // Redux 왜씀?
@@ -43,14 +43,28 @@ let cartList = createSlice({
   ],
   reducers: {
     changeCount(state, action) {
-      state.map(
-        (data, idx) => (data.idx = action.payload ? (data.count += 1) : null),
-      );
+      let check = state.findIndex(data => {
+        return data.id == action.payload;
+      });
+
+      state[check].count++;
+    },
+
+    addList(state, action) {
+      let check = state.findIndex(data => {
+        return data.id == action.payload.id;
+      });
+
+      if (check < 0) {
+        state.push(action.payload);
+      } else if (check >= 0) {
+        state[check].count++;
+      }
     },
   },
 });
 
-export let { changeCount } = cartList.actions;
+export let { changeCount, addList } = cartList.actions;
 
 export default configureStore({
   reducer: {

@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Container, Row, Col, Button, Alert, Tab, Tabs } from "react-bootstrap";
 
 import { Context1 } from "./../App.js";
+
+import { addList } from "./../store.js";
 
 import styled from "styled-components";
 
@@ -39,6 +42,8 @@ import styled from "styled-components";
 
 const Detail = ({ shoes }) => {
   let a = useContext(Context1); // 보관함 해체해줌
+
+  let dispatch = useDispatch();
 
   useEffect(
     () => {
@@ -117,7 +122,20 @@ const Detail = ({ shoes }) => {
             <h4 className="pt-5">{returnData.title}</h4>
             <p>{returnData.content}</p>
             <p>{Number(`${returnData.price}`).toLocaleString()}</p>
-            <Button variant="danger">주문하기</Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                dispatch(
+                  addList({
+                    id: id,
+                    name: returnData.title,
+                    count: 1,
+                  }),
+                );
+              }}
+            >
+              주문하기
+            </Button>
           </Col>
         </Row>
 
