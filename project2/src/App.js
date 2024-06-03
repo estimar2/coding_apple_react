@@ -8,6 +8,7 @@ import {
   json,
 } from "react-router-dom";
 import axios from "axios";
+import { useQuery } from "react-query";
 import {
   Container,
   Nav,
@@ -111,6 +112,27 @@ function App() {
       });
   };
 
+  // 사용자 이름 가져오는 api
+  // https://codingapple1.github.io/userdata.json
+
+  let userInfo = useQuery(
+    "getUserInfo",
+    () =>
+      axios.get("https://codingapple1.github.io/userdata.json").then(data => {
+        return data.data;
+      }),
+    // {
+    //   staleTime: 2000,
+    // },
+  );
+  // react-query 장점
+  // 1. 성공(userInfo.data)/실패(userInfo.error)/로딩중(userInfo.isLoading) 쉽게 파악 가능
+  // 2. 틈만나면 자동으로 재요청(refetch)해줌, staleTIme 으로 refetch 간격도 설정해줄수있음
+  // 3. 실패시 retry 알아서 해줌
+  // 4. state 공유 안해도 됨
+  // 5. ajax 결과 캐싱기능
+  // * redux-toolkit 설치하면 RTK Query도 자동설치됨(react-query 랑 비슷함)
+
   return (
     <div className="App">
       <Navbar bg="light" data-bs-theme="light">
@@ -119,14 +141,31 @@ function App() {
           <Nav className="me-auto">
             {/* <Link to="/">홈</Link>
             <Link to="/detail">상세페이지</Link> */}
+
             <Nav.Link onClick={() => navigate("/")}>Home</Nav.Link>
             <Nav.Link onClick={() => navigate("/detail")}>Detail</Nav.Link>
             <Nav.Link onClick={() => navigate("/cart")}>Cart</Nav.Link>
+
             {/* <Nav.Link href="#home">Home</Nav.Link>
             <Nav.Link href="#detail">Cart</Nav.Link> */}
           </Nav>
+
+          <Nav className="ms-auto">
+            {userInfo.isLoading && "로딩중"}
+            {userInfo.error && "에러남"}
+            {userInfo.data && userInfo.data.name}
+          </Nav>
         </Container>
       </Navbar>
+
+      {/* React Query 사용하면
+          - ajax 성공시/실패시 html보여주려면?
+          - 몇초마다 자동으로 ajax요청?
+          - 실패시 몇초 후 재용청 시도?
+          - prefetch ?
+      이것들 쉽게 구현 가능
+      but 항상 유용하지는 않음
+            - 실시간 데이터를 계속 가져와야하는 사이트들이 쓰면 굿*/}
 
       <Routes>
         {/* Route : 페이지 */}
