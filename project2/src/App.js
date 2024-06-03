@@ -1,5 +1,12 @@
-import { createContext, useState } from "react";
-import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
+import { createContext, useEffect, useState } from "react";
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  Outlet,
+  json,
+} from "react-router-dom";
 import axios from "axios";
 import {
   Container,
@@ -37,6 +44,10 @@ export let Context1 = createContext(); // state보관함
 //        어떤 방법 : URL 형식
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem("watched", JSON.stringify([]));
+  }, []);
+
   const [shoes, setShoes] = useState(data);
   const [prdCount, setPrdCount] = useState([10, 11, 12]);
   const [loading, setLoading] = useState(false);
@@ -46,6 +57,20 @@ function App() {
   // useNavigate : 페이지 이동을 도와주는 hook
   // navigate(2)과 같이 숫자를 넣으면 앞으로가기, 뒤로가기 기능개발도 가능함
   let navigate = useNavigate();
+
+  // Local Storage
+  // 1.key : value 형태로 저장 가능
+  // 2.최대 5MB까지 문자만 저장 가능
+  //      array/object저장하려면 JSON으로 바꾸면 됨
+  //      array/object -> JSON 변환은 JSON.stringify()
+  //      JSON -> array/object 변환은 JSON.parse()
+  // 3.사이트 재접속해도 남아있음(브라우저 청소하면 삭제됨)
+  // 사용법
+  //  1.저장 : localStorage.setItem()
+  //  2.사용 : localStorage.getItem()
+  //  3.삭제 : localStorage.removeItem()
+
+  // Session Storage : 휘발성이 있는 데이터를 저장하고 싶을때 사용
 
   // 상품 더보기
   const _getMore = () => {

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { json, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Container, Row, Col, Button, Alert, Tab, Tabs } from "react-bootstrap";
 
@@ -47,6 +47,16 @@ const Detail = ({ shoes }) => {
 
   useEffect(
     () => {
+      let check = localStorage.getItem("watched")
+        ? JSON.parse(localStorage.getItem("watched"))
+        : [];
+
+      check.push(id);
+
+      let newCheck = [...new Set(check)];
+
+      localStorage.setItem("watched", JSON.stringify(newCheck));
+
       // detail 컴포넌트가 mount, update 시 코드가 실행됨
       // console.log("hello");
 
