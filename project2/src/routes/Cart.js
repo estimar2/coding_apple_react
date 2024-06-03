@@ -2,7 +2,8 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Button } from "react-bootstrap";
 
-import { changeName } from "../store";
+import { changeAge, changeName } from "../store/userSlice.js";
+import { changeCount } from "../store.js";
 
 const Cart = () => {
   // Redux를 사용하면 컴포넌트들이 props없이 state공유 가능(리액트 구인시 대부분 Redux요구)
@@ -17,12 +18,21 @@ const Cart = () => {
   let cartList = useSelector(state => state.cartList);
   console.log(cartList, ">> cartList");
 
-  // store.js로 요청을 보내주는 함수
+  // store.js로 state변경 요청을 보내주는 함수
   let dispatch = useDispatch();
 
   return (
     <>
-      <h6>{user}의 장바구니</h6>
+      <h6>
+        {user.name}({user.age})의 장바구니
+      </h6>
+      <button
+        onClick={() => {
+          dispatch(changeAge(100));
+        }}
+      >
+        버튼
+      </button>
 
       <Table bordered hover>
         <thead>
@@ -45,7 +55,8 @@ const Cart = () => {
                       <Button
                         onClick={() => {
                           // dispatch(state변경함수()) 이렇게 사용
-                          dispatch(changeName());
+                          // dispatch(changeName());
+                          dispatch(changeCount(data.id));
                         }}
                       >
                         +
