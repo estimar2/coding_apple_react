@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, Suspense, lazy, useEffect, useState } from "react";
 import {
   Routes,
   Route,
@@ -23,6 +23,11 @@ import "./App.css";
 import data from "./data.js";
 
 import { List, Detail, About, Event, Cart } from "./routes";
+
+// 메인페이지에서 먼저 로드할 필요없음 => laxy하게 로딩해라 (필요해질때 import 해주세요~)
+// const Detail = lazy(()  => import("./routes/Detail.js"))
+// const Cart = lazy(()  => import("./routes/Cart.js"))
+// 단점 : Cart, detail 컴포넌트 로딩시간 발생
 
 export let Context1 = createContext(); // state보관함
 
@@ -167,80 +172,84 @@ function App() {
       but 항상 유용하지는 않음
             - 실시간 데이터를 계속 가져와야하는 사이트들이 쓰면 굿*/}
 
-      <Routes>
-        {/* Route : 페이지 */}
-        <Route
-          path="/"
-          element={
-            <>
-              <div className="main-bg"></div>
+      <Suspense fallback={<div>로딩중</div>}>
+        {/* Suspense 로 감싸면 로딩중  UI 넣기 가능 */}
 
-              <Container>
-                <Row>
-                  <Col xs={24} md={0}>
-                    <Button
-                      variant="warning"
-                      onClick={() => {
-                        let sortList = [...shoes].sort((a, b) => {
-                          return a.title.localeCompare(b.title);
-                        });
+        <Routes>
+          {/* Route : 페이지 */}
+          <Route
+            path="/"
+            element={
+              <>
+                <div className="main-bg"></div>
 
-                        setShoes(sortList);
-                      }}
-                    >
-                      가나다순 정렬
-                    </Button>
-                  </Col>
-                </Row>
-                <Row xs={1} md={3}>
-                  {shoes ? shoes.map(data => <List data={data} />) : null}
-                </Row>
-                {btnCount <= 1 ? (
+                <Container>
                   <Row>
                     <Col xs={24} md={0}>
-                      <Button variant="warning" onClick={_getMore}>
-                        상품 더보기
+                      <Button
+                        variant="warning"
+                        onClick={() => {
+                          let sortList = [...shoes].sort((a, b) => {
+                            return a.title.localeCompare(b.title);
+                          });
+
+                          setShoes(sortList);
+                        }}
+                      >
+                        가나다순 정렬
                       </Button>
                     </Col>
                   </Row>
-                ) : null}
-              </Container>
-            </>
-          }
-        />
+                  <Row xs={1} md={3}>
+                    {shoes ? shoes.map(data => <List data={data} />) : null}
+                  </Row>
+                  {btnCount <= 1 ? (
+                    <Row>
+                      <Col xs={24} md={0}>
+                        <Button variant="warning" onClick={_getMore}>
+                          상품 더보기
+                        </Button>
+                      </Col>
+                    </Row>
+                  ) : null}
+                </Container>
+              </>
+            }
+          />
 
-        {/* 페이지 여러개 만들고 싶으면 : URL 파라미터 써도 됨 */}
-        <Route
-          path="/detail/:id"
-          element={
-            <Context1.Provider vlaue={{ prdCount, shoes }}>
-              <Detail shoes={shoes} />
-            </Context1.Provider>
-          }
-        />
+          {/* 페이지 여러개 만들고 싶으면 : URL 파라미터 써도 됨 */}
+          <Route
+            path="/detail/:id"
+            element={
+              <Context1.Provider vlaue={{ prdCount, shoes }}>
+                <Detail shoes={shoes} />
+              </Context1.Provider>
+            }
+          />
 
-        {/* 장바구니 */}
-        <Route path="/cart" element={<Cart />} />
+          {/* 장바구니 */}
+          <Route path="/cart" element={<Cart />} />
 
-        {/* Nested Routes : route 안에 route 작성하기
+          {/* Nested Routes : route 안에 route 작성하기
         1. route 작성이 약간 간단해짐 nested routes의 element
         2. 보여주는 곳은 <Outlet></Outlet>
         3. 여러 유사한 페이지가 필요할때 사용하면 용이함 */}
-        <Route path="/about" element={<About />}>
-          <Route path="member" element={<div>1</div>} />
-          <Route path="location" element={<div>2</div>} />
-        </Route>
+          <Route path="/about" element={<About />}>
+            <Route path="member" element={<div>1</div>} />
+            <Route path="location" element={<div>2</div>} />
+          </Route>
 
-        <Route path="/event" element={<Event />}>
-          <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
-          <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
-        </Route>
+          <Route path="/event" element={<Event />}>
+            <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
+            <Route path="two" element={<div>생일기념 쿠폰받기</div>} />
+          </Route>
 
-        {/* 유저가 이상한 경로로 접속했을 때 '없는 페이지입니다'를 보여지고 싶을때 사용
+          {/* 유저가 이상한 경로로 접속했을 때 '없는 페이지입니다'를 보여지고 싶을때 사용
         *경로는 모든 경로를 뜻해서
         위에 만들어둔 /detail 이런게 아닌 이상한 페이지 접속시 *경로로 안내 해줌 */}
-        <Route path="*" element={<div>없는 페이지당</div>} />
-      </Routes>
+          <Route path="*" element={<div>없는 페이지당</div>} />
+        </Routes>
+      </Suspense>
 
       {loading && <Spinner animation="border" role="status" />}
     </div>
