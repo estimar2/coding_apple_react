@@ -34,3 +34,26 @@ PWA 잘되나 확인하려면 build 된걸 VScode 로 오픈해서 index.html �
      - 특정 파일 캐싱 안되도록
        - node_modules/react-scripts/config/webpack.config.js > InjectManifest 에 exclude를 정규식으로 입력 (ex. index.html를 제외시키고 싶다 -> /indexhtml\.html/ 형태로 사용)
          보통은 변경하지 않음
+
+---
+
+#### 자바스크립트의 sync / async 관련 상식
+
+- 동기방식(synchronous) : 코드 적은 순서대로 차례로 코드가 실행됨
+- 비동기 방식(asynchronous) : 순차적으로 실행되지 않고, 완료되면 실행됨
+  - ajax, 이벤트리스터, setTimeout 이런 함수들을 쓸 때 현상이 일어남
+  - 예를 들어
+    ```
+    console.log(1 + 1)
+    axios로 get 요청하고나서 console.log(1 + 2) 실행
+    console.log(1 + 3)
+    ```
+    위의 코드의 경우 2, 4 가 바로 출력되고 그 다음에 3이 출력됨
+    3을 출력하는 코드가 비동기 처리를 지원하는 코드이기 때문
+
+---
+
+#### 리액트의 setState함수 특징
+
+- state 변경함수들은 전부 비동기적(asynchronous)으로 처리됨
+- sync스럽게, 순차적으로 실행하고 싶을 때 해결책은 useEffect
