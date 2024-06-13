@@ -8,7 +8,7 @@
 
 #### REACT에서 DB데이터를 보여주고 싶으면?
 
-<h6> server-side rendering</h6>
+<h3> server-side rendering</h3>
 
 - html을 서버가 만들어서 보내줌
 - nodejs 강의 처럼
@@ -16,13 +16,13 @@
   2.  글목록.html 파일에 꽂아넣고
   3.  그 html 파일을 서버에서 보내주는 것
 
- <h6>client-side rendering</h6>
+ <h3>client-side rendering</h3>
 
 - html을 리액트가 브라우저안에서 만드는 것
   1.  react가 서버에 GET요청으로 DB데이터를 가져와서
   2.  그걸 html로 만들어서 보여줌
 
-<h6>리액트를 쓰는 경우 보통 client-side rendering</h6>
+<h3>리액트를 쓰는 경우 보통 client-side rendering</h3>
 
 1. 서버는 누군가 /product로 GET요청을 하면 DB에서 데이터 꺼내서 보내주라고 API를 짜놓음
 2. 리액트는 상품목록을 보여주고 싶을 때 서버 /product 주소로 GET요청 날리면 됨
@@ -31,7 +31,7 @@
 - react는 서버와의 통신은 거의 ajax로 진행
 - POST요청, 로그인해서 세션만들기 이런것도 ajax로 잘됨
 
-<h6>nodejs 서버파일 상단에</h6>
+<h3>nodejs 서버파일 상단에</h3>
 
 ```
 app.use(express.json());
