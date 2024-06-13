@@ -3,9 +3,9 @@ import { json, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Container, Row, Col, Button, Alert, Tab, Tabs } from "react-bootstrap";
 
-import { Context1 } from "./../App.js";
+import { Context1 } from "../../../project2/src/App.js";
 
-import { addList } from "./../store.js";
+import { addList } from "../../../project2/src/store.js";
 
 import styled from "styled-components";
 
